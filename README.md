@@ -32,8 +32,8 @@ psql -U postgres -d store_rating_app -f backend/db/seed.sql
 
 Seed login:
 
-- Admin: `admin@example.com`
-- Store owner: `owner@example.com`
+- Admin: `admin@gmail.com`
+- Store owner: `owner@gmail.com`
 - Password for both: `Password@123`
 
 ### Backend
