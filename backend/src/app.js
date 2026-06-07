@@ -9,7 +9,7 @@ const ownerRoutes = require('./routes/ownerRoutes');
 
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_URL || 'https://store-rating-2knblckm0-piyush-aryas-projects.vercel.app/login' }));
+app.use(cors({ origin: process.env.CLIENT_URL || 'https://store-rating-app-lovat.vercel.app' }));
 app.use(express.json());
 app.get("/", (req, res) => {
   res.json({
