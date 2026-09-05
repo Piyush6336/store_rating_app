@@ -1,16 +1,26 @@
 import React,{ useEffect, useState } from 'react';
 import Layout from '../components/Layout.jsx';
 import SortableHeader from '../components/SortableHeader.jsx';
+import Message from '../components/Message.jsx';
+import StarRating from '../components/StarRating.jsx';
 import api from '../services/api';
 
 export default function OwnerDashboard() {
   const [data, setData] = useState({ store: null, averageRating: 0, users: [] });
   const [sort, setSort] = useState({ sortBy: 'name', order: 'asc' });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     async function loadDashboard() {
-      const response = await api.get('/owner/dashboard');
-      setData(response.data);
+      try {
+        const response = await api.get('/owner/dashboard');
+        setData(response.data);
+      } catch (apiError) {
+        setError(apiError.response?.data?.message || 'Could not load your dashboard.');
+      } finally {
+        setIsLoading(false);
+      }
     }
 
     loadDashboard();
@@ -42,14 +52,16 @@ export default function OwnerDashboard() {
     <Layout title="Store Owner Dashboard">
       <section className="stats-grid">
         <div className="stat-box wide-stat">
-          <span>{data.store?.name || 'No store assigned'}</span>
+          <span>{isLoading ? 'Loading…' : data.store?.name || 'No store assigned'}</span>
           <p>Store</p>
         </div>
         <div className="stat-box">
-          <span>{data.averageRating}</span>
-          <p>Average Rating</p>
+          <span>{isLoading ? '—' : data.averageRating}</span>
+          <p>Average Rating</p><StarRating value={Number(data.averageRating)} label="Average rating" />
         </div>
       </section>
+
+      <Message type="error">{error}</Message>
 
       <section className="panel table-panel">
         <h2>Users Who Rated Your Store</h2>
@@ -63,14 +75,16 @@ export default function OwnerDashboard() {
             </tr>
           </thead>
           <tbody>
+            {isLoading ? <tr><td colSpan="4"><div className="table-loading">Loading ratings…</div></td></tr> : null}
             {sortedUsers.map((user) => (
               <tr key={user.id}>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
                 <td>{user.address}</td>
-                <td>{user.rating}</td>
+                <td><span className="table-rating">{user.rating} <StarRating value={Number(user.rating)} label={`${user.name}'s rating`} /></span></td>
               </tr>
             ))}
+            {!isLoading && sortedUsers.length === 0 ? <tr><td colSpan="4"><div className="table-empty">No ratings yet. Your customer feedback will appear here.</div></td></tr> : null}
           </tbody>
         </table>
       </section>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { KeyRound, LogOut, Store } from 'lucide-react';
+import { KeyRound, LogOut, Store, UserRound } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext.jsx';
 
@@ -16,11 +16,11 @@ export default function Layout({ title, children }) {
     <div className="app-shell">
       <header className="topbar">
         <Link to="/" className="brand">
-          <Store size={22} />
-          <span>Store Ratings</span>
+          <span className="brand-mark"><Store size={20} /></span>
+          <span>Store<span className="brand-accent">Score</span></span>
         </Link>
         <div className="topbar-actions">
-          <span className="user-chip">{user?.name}</span>
+          <span className="user-chip"><UserRound size={15} />{user?.name}</span>
           <Link className="icon-button" title="Change password" to="/password">
             <KeyRound size={18} />
           </Link>
@@ -30,7 +30,7 @@ export default function Layout({ title, children }) {
         </div>
       </header>
       <main className="page">
-        <h1>{title}</h1>
+        <div className="page-heading"><div><p className="eyebrow">STORE MANAGEMENT</p><h1>{title}</h1></div></div>
         {children}
       </main>
     </div>
