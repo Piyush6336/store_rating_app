@@ -63,3 +63,7 @@ Open `http://localhost:5173`.
 - Address: required and maximum 400 characters.
 - Password: 8 to 16 characters, at least one uppercase letter and one special character.
 - Email: standard email format.
+
+
+
+
